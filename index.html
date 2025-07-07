@@ -280,6 +280,7 @@
             <h2>チャレンジ内容</h2>
             <p>予算 <strong>500円以内</strong> でおにぎりをリュックに詰めよう！</p>
             <p>目標：<strong>カロリーを最大化</strong>して、お得におにぎりを選ぼう</p>
+            <p style="font-size: 16px; margin-top: 10px;">※各おにぎりは1個ずつしか選べません</p>
         </div>
         
         <div class="game-area">
@@ -322,7 +323,6 @@
         <div class="controls">
             <button class="btn" onclick="clearSelection()">🗑️ リセット</button>
             <button class="btn btn-success" onclick="checkResult()">✅ 結果を確認</button>
-            <button class="btn btn-warning" onclick="showOptimal()">💡 最適解を見る</button>
         </div>
         
         <div class="result" id="result"></div>
@@ -471,32 +471,6 @@
                 result.className = "result try-again";
             }
             
-            result.style.display = 'block';
-        }
-
-        function showOptimal() {
-            // 動的プログラミングで最適解を計算
-            const dp = Array(maxBudget + 1).fill(0);
-            const choice = Array(maxBudget + 1).fill([]);
-            
-            for (let budget = 0; budget <= maxBudget; budget++) {
-                for (let item of onigiriData) {
-                    if (budget >= item.price) {
-                        const newCalories = dp[budget - item.price] + item.calories;
-                        if (newCalories > dp[budget]) {
-                            dp[budget] = newCalories;
-                            choice[budget] = [...choice[budget - item.price], item];
-                        }
-                    }
-                }
-            }
-            
-            selectedItems = choice[maxBudget];
-            updateDisplay();
-            
-            const result = document.getElementById('result');
-            result.innerHTML = `🏆 最適解：${dp[maxBudget]}kcal<br>これが理論上の最大カロリーです！`;
-            result.className = "result excellent";
             result.style.display = 'block';
         }
 
